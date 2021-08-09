@@ -65,7 +65,20 @@ app.post('/api/persons/', (req, res) => {
 
   if (!body.name) {
     return res.status(400).json({
-      error: 'content missing'
+      error: 'name missing'
+    })
+  }
+
+  if (!body.number) {
+    return res.status(400).json({
+      error: 'number missing'
+    })
+  }
+
+  const check_name = persons.filter(person => person.name === body.name)
+  if(!(check_name.length === 0)) {
+    return res.status(400).json({
+      error: 'name must be unique!'
     })
   }
 
