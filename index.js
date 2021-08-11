@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 var morgan = require('morgan')
 const cors = require('cors')
+const Person = require('.models/person')
 
 app.use(cors())
 app.use(express.json())
@@ -83,6 +85,7 @@ app.post('/api/persons/', (req, res) => {
     })
   }
 
+  // JATKA TÄSTÄ
   const check_name = persons.filter(person => person.name === body.name)
   if(!(check_name.length === 0)) {
     return res.status(400).json({
@@ -100,7 +103,7 @@ app.post('/api/persons/', (req, res) => {
   res.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
