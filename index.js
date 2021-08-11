@@ -42,7 +42,6 @@ app.get('/api/persons', (req, res) => {
 app.get('/api/info', (req, res) => {
   const amount = persons.length
   const date = new Date()
-   console.log("Testing hammond")
   res.send(`<p>Phonebook has info for ${amount} people.</p>
     <p>${date}</p>`)
 })
