@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 var morgan = require('morgan')
 const cors = require('cors')
-const Person = require('.models/person')
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.json())
@@ -38,7 +38,9 @@ morgan.token('person', function (req, res) {
     return JSON.stringify(req.body) })
 
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(persons => {
+    res.json(persons)
+  })
 })
 
 app.get('/api/info', (req, res) => {
@@ -49,18 +51,14 @@ app.get('/api/info', (req, res) => {
 })
 
 app.get('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  const person = persons.find(person => person.id === id)
-
-  if (person) {
+  const id = req.params.id
+  const person = Person.findById(id).then(person => {
     res.json(person)
-  } else {
-    res.status(404).end()
-  }
+  })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
+  const id = req.params.id
   persons = persons.filter(person => person.id !== id)
   res.status(204).end()
 
@@ -85,7 +83,6 @@ app.post('/api/persons/', (req, res) => {
     })
   }
 
-  // JATKA TÄSTÄ
   const check_name = persons.filter(person => person.name === body.name)
   if(!(check_name.length === 0)) {
     return res.status(400).json({
